@@ -1,22 +1,20 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
+
+const ARR_COLORS = ["red", "yellow", "green", "black"];
 
 export const FunctionalTrafficLight = () => {
-  const [lightColor, setLightColor] = useState("black");
+  const [lightColorIndex, setLightColorIndex] = useState(ARR_COLORS.length - 4);
 
   const nextLightColor = () => {
-    switch (lightColor) {
-      case "red":
-        setLightColor("green");
-        break;
-      case "green":
-        setLightColor("yellow");
-        break;
-      case "yellow":
-        setLightColor("red");
-        break;
-      default:
-        setLightColor("red");
+    let colorIndexSet;
+    if (lightColorIndex === ARR_COLORS.length - 1) {
+      colorIndexSet = 0;
+    } else if (lightColorIndex === 0) {
+      colorIndexSet = ARR_COLORS.length - 2;
+    } else {
+      colorIndexSet = lightColorIndex - 1;
     }
+    setLightColorIndex(colorIndexSet);
   };
 
   return (
@@ -24,15 +22,20 @@ export const FunctionalTrafficLight = () => {
       <h2>Functional Traffic Light</h2>
       <div className="traffic-light">
         {/* Background color can be black | yellow | red | green */}
-        <div
-          className={`circle ${lightColor === "red" ? "red" : "black"}`}
-        ></div>
-        <div
-          className={`circle ${lightColor === "yellow" ? "yellow" : "black"}`}
-        ></div>
-        <div
-          className={`circle ${lightColor === "green" ? "green" : "black"}`}
-        ></div>
+
+        {ARR_COLORS.map((color, index) => (
+          <Fragment key={color}>
+            {index < ARR_COLORS.length - 1 && (
+              <div
+                className={`circle ${
+                  color === ARR_COLORS[lightColorIndex]
+                    ? color
+                    : ARR_COLORS[ARR_COLORS.length - 1]
+                }`}
+              ></div>
+            )}
+          </Fragment>
+        ))}
       </div>
       <button className="next-state-button" onClick={nextLightColor}>
         Next State
